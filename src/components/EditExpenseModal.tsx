@@ -43,6 +43,7 @@ export default function EditExpenseModal({ expense, onSave, onClose, currency }:
       amount: parseFloat(amount.replace(/,/g, '')),
       category,
       date,
+      budgetId: expense.budgetId, // Preserve the budgetId
     })
   }
 

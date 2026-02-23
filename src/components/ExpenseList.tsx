@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Expense, CATEGORIES, Currency, formatCurrency } from '@/types'
+import { Expense, CATEGORIES, Currency, formatCurrency, DateRange, CustomDateRange } from '@/types'
 import { Edit2, Trash2, Receipt, PlusCircle, Download, RotateCcw } from 'lucide-react'
 import EditExpenseModal from './EditExpenseModal'
+import DateRangeFilter from './DateRangeFilter'
 
 interface ExpenseListProps {
   expenses: Expense[]
@@ -13,9 +14,25 @@ interface ExpenseListProps {
   onAddExpense?: () => void
   onExport?: () => void
   onReset?: () => void
+  dateRange: DateRange
+  customRange: CustomDateRange | null
+  onDateRangeChange: (range: DateRange) => void
+  onCustomRangeChange: (range: CustomDateRange) => void
 }
 
-export default function ExpenseList({ expenses, onEdit, onDelete, currency, onAddExpense, onExport, onReset }: ExpenseListProps) {
+export default function ExpenseList({ 
+  expenses, 
+  onEdit, 
+  onDelete, 
+  currency, 
+  onAddExpense, 
+  onExport, 
+  onReset,
+  dateRange,
+  customRange,
+  onDateRangeChange,
+  onCustomRangeChange
+}: ExpenseListProps) {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
 
   const sortedExpenses = [...expenses].sort(
@@ -77,6 +94,16 @@ export default function ExpenseList({ expenses, onEdit, onDelete, currency, onAd
               </button>
             )}
           </div>
+        </div>
+        
+        {/* Date Range Filter */}
+        <div className="mb-6">
+          <DateRangeFilter
+            dateRange={dateRange}
+            customRange={customRange}
+            onDateRangeChange={onDateRangeChange}
+            onCustomRangeChange={onCustomRangeChange}
+          />
         </div>
         
         {sortedExpenses.length === 0 ? (

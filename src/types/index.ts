@@ -1,14 +1,39 @@
 export interface Expense {
   id: string
+  budgetId?: string  // Optional for backward compatibility
   label: string
   amount: number
   category: string
   date: string
 }
 
-export interface Budget {
+export interface IncomeSource {
+  id: string
+  budgetId: string
   name: string
   amount: number
+}
+
+export interface BudgetData {
+  id: string
+  name: string
+  amount: number
+  currency: string
+  createdAt: string
+  incomeSources?: IncomeSource[]  // Optional for backward compatibility
+}
+
+export interface AppData {
+  budgets: BudgetData[]
+  expenses: Expense[]
+  activeBudgetId: string | null
+}
+
+export type DateRange = 'all' | 'thisWeek' | 'thisMonth' | 'lastMonth' | 'custom'
+
+export interface CustomDateRange {
+  startDate: string
+  endDate: string
 }
 
 export interface Currency {

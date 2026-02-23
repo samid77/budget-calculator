@@ -20,15 +20,19 @@ export default function AnalyticsPanel({ expenses, budget, currency, filterCateg
     ? Math.max(...expenses.map(exp => exp.amount)) 
     : 0
 
-  const currentMonth = new Date().getMonth()
-  const currentYear = new Date().getFullYear()
-  const monthExpenses = expenses.filter(exp => {
-    const expDate = new Date(exp.date)
-    return expDate.getMonth() === currentMonth && expDate.getFullYear() === currentYear
-  })
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
-  const monthTotal = monthExpenses.reduce((sum, exp) => sum + exp.amount, 0)
-  const dailyAvg = monthTotal / daysInMonth
+  // Calculate daily average based on date range of expenses
+  const getDailyAverage = () => {
+    if (totalExpenses === 0) return 0
+    
+    const dates = expenses.map(exp => new Date(exp.date).getTime())
+    const minDate = Math.min(...dates)
+    const maxDate = Math.max(...dates)
+    const daysDiff = Math.ceil((maxDate - minDate) / (1000 * 60 * 60 * 24)) + 1
+    
+    return totalSpent / daysDiff
+  }
+  
+  const dailyAvg = getDailyAverage()
 
   const stats = [
     { label: 'Total Expenses', value: totalExpenses.toString() },
